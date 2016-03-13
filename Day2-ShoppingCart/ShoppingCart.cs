@@ -7,8 +7,7 @@ namespace Day2_ShoppingCart
     internal class ShoppingCart
     {
         private List<Book> _cartItems = new List<Book>();
-        private List<Book> _checkedItems = new List<Book>();
-        private List<Book> _tempItems = new List<Book>();
+        private List<Book> _readyForCheckout = new List<Book>();
 
         public ShoppingCart()
         {
@@ -32,7 +31,7 @@ namespace Day2_ShoppingCart
                 if (!firstCheck.Checked)
                 {
                     //先拿到一邊
-                    _tempItems.Add(firstCheck);
+                    _readyForCheckout.Add(firstCheck);
                     firstCheck.Checked = true;
                     //再掃剩下的
                     foreach (var thenCheck in _cartItems)
@@ -41,34 +40,54 @@ namespace Day2_ShoppingCart
                         if (firstCheck.Name != thenCheck.Name)
                         {
                             //第二本也放一邊
-                            _tempItems.Add(thenCheck);
+                            _readyForCheckout.Add(thenCheck);
                             thenCheck.Checked = true;
                             break;
                         }
                     }
-                    //放旁邊的每一本
-                    foreach (var item in _tempItems)
-                    {
-                        //看總共有幾本
-                        switch (_tempItems.Count)
-                        {
-                            //只有一本，原價
-                            case 1:
-                                TotalAmount += item.Price;
-                                break;
-
-                            //兩本，95折
-                            case 2:
-                                TotalAmount += item.Price * 0.95;
-                                break;
-
-                            default:
-                                break;
-                        }
-                    }
-                    _tempItems.Clear();
+                    CalculateTotalAmount();
                 }
             }
+        }
+
+        private void CalculateTotalAmount()
+        {
+            //放旁邊的每一本
+            foreach (var item in _readyForCheckout)
+            {
+                //看總共有幾本
+                switch (_readyForCheckout.Count)
+                {
+                    //只有一本，原價
+                    case 1:
+                        TotalAmount += item.Price;
+                        break;
+
+                    //兩本，95折
+                    case 2:
+                        TotalAmount += item.Price * 0.95;
+                        break;
+
+                    //兩本，95折
+                    case 3:
+                        TotalAmount += item.Price * 0.90;
+                        break;
+
+                    //兩本，95折
+                    case 4:
+                        TotalAmount += item.Price * 0.80;
+                        break;
+
+                    //兩本，95折
+                    case 5:
+                        TotalAmount += item.Price * 0.75;
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+            _readyForCheckout.Clear();
         }
     }
 }
