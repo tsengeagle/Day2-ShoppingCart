@@ -7,6 +7,32 @@ namespace Day2_ShoppingCart
     public class ShoppingCartTest
     {
         [TestMethod]
+        public void PromotionTest_GivenBuyVol_1To4_EachFor_1_ThenHitCheckout_TotalAmountShouldBe_320()
+        {
+            //arrange
+            Book poterVol1 = new Book() { Name = "哈利波特第一集", Price = 100 };
+            Book poterVol2 = new Book() { Name = "哈利波特第二集", Price = 100 };
+            Book poterVol3 = new Book() { Name = "哈利波特第三集", Price = 100 };
+            Book poterVol4 = new Book() { Name = "哈利波特第四集", Price = 100 };
+
+            ShoppingCart shoppingCart = new ShoppingCart();
+            shoppingCart.AddIn(poterVol1);
+            shoppingCart.AddIn(poterVol2);
+            shoppingCart.AddIn(poterVol3);
+            shoppingCart.AddIn(poterVol4);
+
+            double expectedAmount = (poterVol1.Price + poterVol2.Price + poterVol3.Price + poterVol4.Price) * 0.80;
+
+            //act
+            shoppingCart.Checkout();
+
+            double actualAmount = shoppingCart.TotalAmount;
+
+            //assert
+            Assert.AreEqual(expectedAmount, actualAmount);
+        }
+
+        [TestMethod]
         public void PromotionTest_GivenBuyVolOneFor_1_ThenBuyVolTwoFor_1_ThenHitCheckOut_TotalAmountShouldBe190()
         {
             //arrange
