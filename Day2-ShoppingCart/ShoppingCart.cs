@@ -29,40 +29,44 @@ namespace Day2_ShoppingCart
             //第一本開始
             foreach (var firstCheck in _cartItems)
             {
-                //先拿到一邊
-                _tempItems.Add(firstCheck);
-                _cartItems.Remove(firstCheck);
-                //再掃剩下的
-                foreach (var thenCheck in _cartItems)
+                if (!firstCheck.Checked)
                 {
-                    //如果兩本不一樣
-                    if (firstCheck.Name != thenCheck.Name)
+                    //先拿到一邊
+                    _tempItems.Add(firstCheck);
+                    firstCheck.Checked = true;
+                    //再掃剩下的
+                    foreach (var thenCheck in _cartItems)
                     {
-                        //第二本也放一邊
-                        _tempItems.Add(thenCheck);
-                        _cartItems.Remove(thenCheck);
-                        break;
+                        //如果兩本不一樣
+                        if (firstCheck.Name != thenCheck.Name)
+                        {
+                            //第二本也放一邊
+                            _tempItems.Add(thenCheck);
+                            thenCheck.Checked = true;
+                            break;
+                        }
                     }
-                }
-                //放旁邊的每一本
-                foreach (var item in _tempItems)
-                {
-                    //看總共有幾本
-                    switch (_tempItems.Count)
+                    //放旁邊的每一本
+                    foreach (var item in _tempItems)
                     {
-                        //只有一本，原價
-                        case 1:
-                            TotalAmount += item.Price;
-                            break;
+                        //看總共有幾本
+                        switch (_tempItems.Count)
+                        {
+                            //只有一本，原價
+                            case 1:
+                                TotalAmount += item.Price;
+                                break;
 
-                        //兩本，95折
-                        case 2:
-                            TotalAmount += item.Price * 0.95;
-                            break;
+                            //兩本，95折
+                            case 2:
+                                TotalAmount += item.Price * 0.95;
+                                break;
 
-                        default:
-                            break;
+                            default:
+                                break;
+                        }
                     }
+                    _tempItems.Clear();
                 }
             }
         }
