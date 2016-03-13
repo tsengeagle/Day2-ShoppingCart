@@ -12,11 +12,13 @@ namespace Day2_ShoppingCart
             //arrange
             Book book = new Book();
             book.Name = "哈利波特第一集";
+            //漏了價格
+            book.Price = 100;
 
             ShoppingCart shoppingCart = new ShoppingCart();
             shoppingCart.AddIn(book);
 
-            double expectedAmount = 100;
+            double expectedAmount = book.Price;
 
             //act
             shoppingCart.Checkout();
