@@ -30,20 +30,19 @@ namespace Day2_ShoppingCart
             {
                 if (!firstCheck.Checked)
                 {
-                    //先拿到一邊
+                    //先拿到一邊，註記結帳
                     _readyForCheckout.Add(firstCheck);
                     firstCheck.Checked = true;
-                    //再掃剩下的
-                    foreach (var thenCheck in _cartItems)
+
+                    //從還沒結帳，且與剛剛那本書不同書名的書堆中，依照書名群組
+                    var itemsGroup = _cartItems.Where(w => (!w.Checked) && (w.Name != firstCheck.Name)).GroupBy(g => g.Name);
+                    //每一組
+                    foreach (var items in itemsGroup)
                     {
-                        //如果兩本不一樣
-                        if (firstCheck.Name != thenCheck.Name)
-                        {
-                            //第二本也放一邊
-                            _readyForCheckout.Add(thenCheck);
-                            thenCheck.Checked = true;
-                            break;
-                        }
+                        //從還未結帳的書堆中抓第一筆，放進待結帳區，且註記結帳
+                        Book checkedBook = _cartItems.Where(w => (!w.Checked) && (w.Name == items.Key)).First();
+                        _readyForCheckout.Add(checkedBook);
+                        checkedBook.Checked = true;
                     }
                     CalculateTotalAmount();
                 }
